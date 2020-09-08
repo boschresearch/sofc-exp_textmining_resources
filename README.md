@@ -113,10 +113,10 @@ The columns for `entity_types` and `slots` uses a BIO format. Columns are tab-se
   SPAN  43  MATERIAL                  19   34   37  SFM
   SPAN  44  EXPERIMENT:previous_work  19   43   52  displayed
   SPAN  45  MATERIAL                  19  120  123  air
-  SPAN  46  VALUE                     19  125  136  8–60 S cm−1
+  SPAN  46  VALUE                     19  125  136  860 S cm−1
   SPAN  47  MATERIAL                  19  142  150  hydrogen
-  SPAN  48  VALUE                     19  152  162  4–8 S cm−1
-  SPAN  49  VALUE                     19  180  191  400–600 oC9
+  SPAN  48  VALUE                     19  152  162  48 S cm−1
+  SPAN  49  VALUE                     19  180  191  400600 oC9
   ...
   ```
 
@@ -158,8 +158,37 @@ mentions, but conceptually they indicate links between the respective `EXPERIMEN
 
 ## Code
 
-to be added
+### Installation Requirements
 
+We ran our experiments using Python 3.8. You need the following conda packages: `torch`, `numpy` and `scikit-learn`, and the pip package `transformers` (by Huggingface).
+See also the exported conda environment (`sofcexp.yml` at the top level of the project).
+
+### Preparing Pretrained Embeddings and Language Models
+
+#### Word2vec, mat2vec, BPE
+
+Download the pretrained word2vec, mat2vec and bpe embeddings and place them in data/embeddings. If you prefer a different storage location, update the values of the command-line parameters `embedding_file_word2vec`, `embedding_file_mat2vec`, `embedding_file_bpe` in `main_preprocess.py`, accordingly.
+
+word2vec and bpe embeddings are expected in .bin format; for mat2vec embeddings, you will need the whole content of the folder `mat2vec/training/models/pretrained_embeddings` from the mat2vec project.
+
+Run the script `main_preprocess.py`. It will reduce the embeddings to the corpus vocabulary and create word-to-embedding-index files.
+The reduced embeddings will be stored as .npy files, the word2index files as pickle files.
+The default storage place is again data/embeddings but can be changed via command-line arguments of `main_preprocess.py`.
+
+#### (Sci)BERT
+
+Place the PyTorch SciBERT model into `models/SciBERT/scibert_scivocab_uncased`.
+Make sure this directory contains the files `config.json`, `pytorch_model.bin`, and `vocab.txt`.
+If you are using a different BERT model, adapt the value of the parameter `pretrained_bert`, see `main.py`.
+
+
+### Running Cross Validation Experiments
+See scripts in `scripts` folder for configurations for replicating our ACL 2020 experiments.
+After your jobs for the individual runs of the CV folds have finished, run the file
+```
+python source/evaluation/evaluate_cross_validation.y
+```
+with appropriate command line parameters (see this file for arguments) to collect the predictions from the runs and compute aggregate statistics.
 
 ## License
 
