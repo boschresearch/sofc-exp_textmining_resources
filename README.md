@@ -76,8 +76,9 @@ The binary label (0 or 1) per line corresponds to whether the sentence describes
 experiment or not. We simply considered all sentences containing at least one frame-evoking element to
 be an experiment-describing sentence (label 1).
 The character offsets expressing the start end end offsets of each sentence refer to the respective files
-in the `texts` directory. Note that it is mostly the case that each line in these files contains one
-sentence, but there are several cases where sentence annotations include line breaks.
+in the `texts` directory. __*Note that it is mostly the case that each line in these files contains one
+sentence, but there are several cases where sentence annotations include line breaks. Hence, do always use the sentence
+annotations given here when working with the other annotation levels!*__
 Sentence tokenization was performed by Java's built-in BreakIterator.getSentenceInstance with US locale.
 
 
