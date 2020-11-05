@@ -196,7 +196,7 @@ with appropriate command line parameters (see this file for arguments) to collec
 The code in this repository is open-sourced under the AGPL-3.0 license. See the
 [LICENSE](code/LICENSE) file for details.
 For a list of other open source components included in this project, see the
-file [code/3rd-party-licenses.txt](3rd-party-licenses.txt).
+file [code/3rd-party-licenses.txt](code/3rd-party-licenses.txt).
 
 The manual annotations created for the SOFC-Exp corpus located in the
 folder [sofc-exp-corpus/annotations](sofc-exp-corpus/annotations) are
