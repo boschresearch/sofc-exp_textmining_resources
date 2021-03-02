@@ -168,7 +168,7 @@ See also the exported conda environment (`sofcexp.yml` at the top level of the p
 
 #### Word2vec, mat2vec, BPE
 
-Download the pretrained word2vec, mat2vec and bpe embeddings and place them in data/embeddings. If you prefer a different storage location, update the values of the command-line parameters `embedding_file_word2vec`, `embedding_file_mat2vec`, `embedding_file_bpe` in `main_preprocess.py`, accordingly.
+Download the pretrained word2vec, [mat2vec](https://github.com/materialsintelligence/mat2vec) and bpe embeddings and place them in data/embeddings. If you prefer a different storage location, update the values of the command-line parameters `embedding_file_word2vec`, `embedding_file_mat2vec`, `embedding_file_bpe` in `main_preprocess.py`, accordingly.
 
 word2vec and bpe embeddings are expected in .bin format; for mat2vec embeddings, you will need the whole content of the folder `mat2vec/training/models/pretrained_embeddings` from the mat2vec project.
 
@@ -178,7 +178,7 @@ The default storage place is again data/embeddings but can be changed via comman
 
 #### (Sci)BERT
 
-Place the PyTorch SciBERT model into `models/SciBERT/scibert_scivocab_uncased`.
+Place the [PyTorch SciBERT model](https://huggingface.co/allenai/scibert_scivocab_uncased) into `models/SciBERT/scibert_scivocab_uncased`.
 Make sure this directory contains the files `config.json`, `pytorch_model.bin`, and `vocab.txt`.
 If you are using a different BERT model, adapt the value of the parameter `pretrained_bert`, see `main.py`.
 
