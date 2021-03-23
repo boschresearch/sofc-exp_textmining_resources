@@ -168,7 +168,7 @@ See also the exported conda environment (`sofcexp.yml` at the top level of the p
 
 #### Word2vec, mat2vec, BPE
 
-Download the pretrained word2vec, [mat2vec](https://github.com/materialsintelligence/mat2vec) and bpe embeddings and place them in data/embeddings. If you prefer a different storage location, update the values of the command-line parameters `embedding_file_word2vec`, `embedding_file_mat2vec`, `embedding_file_bpe` in `main_preprocess.py`, accordingly.
+Download the pretrained [word2vec](https://code.google.com/archive/p/word2vec), [mat2vec](https://github.com/materialsintelligence/mat2vec) and [bpe](https://github.com/bheinzerling/bpemb) embeddings and place them in data/embeddings. If you prefer a different storage location, update the values of the command-line parameters `embedding_file_word2vec`, `embedding_file_mat2vec`, `embedding_file_bpe` in `main_preprocess.py`, accordingly.
 
 word2vec and bpe embeddings are expected in .bin format; for mat2vec embeddings, you will need the whole content of the folder `mat2vec/training/models/pretrained_embeddings` from the mat2vec project.
 
