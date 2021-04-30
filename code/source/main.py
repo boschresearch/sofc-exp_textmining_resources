@@ -100,7 +100,7 @@ if __name__ == '__main__':
     # Select model type, paths to pretrained models
     parser.add_argument("-model_type", type=str, default=None, help="Is required, should be one of BiLSTM, BERT")
     parser.add_argument("-pretrained_bert", type=str, help="Path to pretrained BERT model",
-                        default="../data/models/SciBERT/scibert_scivocab-uncased")
+                        default="../data/models/SciBERT/scibert_scivocab_uncased")
     parser.add_argument("-lr_bert", type=float, default=4e-7, help="Learning rate for BERT part")
 
     args = parser.parse_args()
