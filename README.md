@@ -163,6 +163,7 @@ mentions, but conceptually they indicate links between the respective `EXPERIMEN
 
 We ran our experiments using Python 3.8. You need the following conda packages: `torch`, `numpy` and `scikit-learn`, and the pip package `transformers` (by Huggingface).
 See also the exported conda environment (`sofcexp.yml` at the top level of the project).
+**Important note:** Our code seems to work only with PyTorch 1.5. We are working on an update.
 
 ### Preparing Pretrained Embeddings and Language Models
 
