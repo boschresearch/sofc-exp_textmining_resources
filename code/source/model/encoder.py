@@ -55,6 +55,7 @@ class Encoder(nn.Module):
     def forward(self, tokens, subtokens, bertTensor, bert_subtoken_mask, lengths, token_lengths):
         x = self.embeddingLayer(tokens, subtokens, bertTensor, bert_subtoken_mask, token_lengths)
 
+        lengths = lengths.cpu()
         inputs = pack_padded_sequence(x, lengths, batch_first=True, enforce_sorted=False)
 
         outputs, (ht, ct) = self.lstm(inputs)

@@ -36,6 +36,7 @@ from model.crfLayer import CRFLayer
 from dataHandling.dataLoader import SofcExpDataset
 from trainers.sentence_classification_trainer import SentenceClassificationTrainer, BertSentenceClassificationTrainer
 from trainers.sequence_tagging_trainer import SequenceTaggingTrainer
+from trainers.general_trainer import collate_fn
 from dataHandling.sofc_exp_utils import get_data_split_docids
 from preprocess import preprocess_embeddings
 from transformers import AdamW
@@ -59,12 +60,12 @@ if __name__ == '__main__':
     parser.add_argument('-corpus_dir', default='../../sofc-exp-corpus', type=str)
     parser.add_argument('-corpus_meta_data_file', default='../../sofc-exp-corpus/SOFC-Exp-Metadata.csv', type=str)
 
-    parser.add_argument('-embedding_file_word2vec', default='../data/embeddings/word2vec.npy', type=str) 
-    parser.add_argument('-embedding_file_mat2vec', default='../data/embeddings/mat2vec.npy', type=str)
-    parser.add_argument('-embedding_file_bpe', default='../data/embeddings/bpe.npy', type=str)
-    parser.add_argument('-word2index_file_word2vec', default='../data/embeddings/word2index_word2vec.pickle', type=str)
-    parser.add_argument('-word2index_file_mat2vec', default='../data/embeddings/word2index_mat2vec.pickle', type=str)
-    parser.add_argument('-word2index_file_bpe', default='../data/embeddings/word2index_bpe.pickle', type=str)
+    parser.add_argument('-embedding_file_word2vec', default='../../data/embeddings/word2vec.npy', type=str) 
+    parser.add_argument('-embedding_file_mat2vec', default='../../data/embeddings/mat2vec.npy', type=str)
+    parser.add_argument('-embedding_file_bpe', default='../../data/embeddings/bpe.npy', type=str)
+    parser.add_argument('-word2index_file_word2vec', default='../../data/embeddings/word2index_word2vec.pickle', type=str)
+    parser.add_argument('-word2index_file_mat2vec', default='../../data/embeddings/word2index_mat2vec.pickle', type=str)
+    parser.add_argument('-word2index_file_bpe', default='../../data/embeddings/word2index_bpe.pickle', type=str)
     parser.add_argument('-save_dir', default='../models', type=str, help="directory for model checkpoints and prediction results")
 
     # Training parameters
@@ -100,7 +101,7 @@ if __name__ == '__main__':
     # Select model type, paths to pretrained models
     parser.add_argument("-model_type", type=str, default=None, help="Is required, should be one of BiLSTM, BERT")
     parser.add_argument("-pretrained_bert", type=str, help="Path to pretrained BERT model",
-                        default="../data/models/SciBERT/scibert_scivocab_uncased")
+                        default="../../data/models/SciBERT/scibert_scivocab_uncased")
     parser.add_argument("-lr_bert", type=float, default=4e-7, help="Learning rate for BERT part")
 
     args = parser.parse_args()
@@ -281,7 +282,7 @@ if __name__ == '__main__':
 
     # Create output directory if necessary.
     if not os.path.isdir(options["save_dir"]):
-        os.mkdir(options["save_dir"])
+        os.makedirs(options["save_dir"], exist_ok=True)
 
     # Configure optimizer. AdamW works best when using BERT embeddings.
     if options["optim"] == 'sgd':
@@ -335,10 +336,10 @@ if __name__ == '__main__':
         crfLayer.load_state_dict(crf_state)
         trainer.update_model(model_list=[model,crfLayer])
         print("evaluating on dev")
-        dev_loader = DataLoader(dataset_dev, batch_size=options["batch_size"])
+        dev_loader = DataLoader(dataset_dev, batch_size=options["batch_size"], collate_fn=collate_fn)
         trainer.evaluate(data_loader=dev_loader, dataset_name="DEV", device=device)
         print("evaluating on test")
-        test_loader = DataLoader(dataset_test, batch_size=1)
+        test_loader = DataLoader(dataset_test, batch_size=1, collate_fn=collate_fn)
         trainer.evaluate(data_loader=test_loader, dataset_name="TEST", device=device)
 
     elif options["task"] == "sentence" and options["model_type"] == "BERT":

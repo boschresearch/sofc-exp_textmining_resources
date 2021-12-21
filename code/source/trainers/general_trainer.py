@@ -27,6 +27,20 @@ import pickle
 from evaluation import conlleval
 import constants
 
+def collate_fn(data):
+        output = dict()
+        output["token_indices"] = torch.stack([t["token_indices"] for t in data])
+        output["subtoken_indices"] = torch.stack([t["subtoken_indices"] for t in data])
+        output["length"] = torch.stack([t["length"] for t in data])
+        output["token_length"] = torch.stack([t["token_length"] for t in data])
+        output["tokens"] = [(tokens) for tokens in zip(*[t["tokens"] for t in data])]
+        bert_tensors = [t["bertTensor"] for t in data]
+        output["bertTensor"] = [torch.stack(bt) for bt in zip(*bert_tensors)]
+        output["doc_id"] = [t["doc_id"] for t in data]
+        output["sent_id"] = torch.tensor([t["sent_id"] for t in data])
+        output["entity_label"] = torch.stack([t["entity_label"] for t in data])
+        output["slot_label"] = torch.stack([t["slot_label"] for t in data])
+        return output
 
 class Trainer:
     def __init__(self, model_list, loss_function, optimizer, train_set, dev_set, options):
@@ -71,7 +85,7 @@ class Trainer:
             labels, labels_flat = self.get_gold_labels(batch, device)
             epoch_labels = np.append(epoch_labels, labels_flat, axis=0)
             epoch_predictions = np.append(epoch_predictions, predictions, axis=0)
-        conf = confusion_matrix(epoch_labels, epoch_predictions, [i for i in range(self.options["num_labels"])])
+        conf = confusion_matrix(epoch_labels, epoch_predictions, labels=[i for i in range(self.options["num_labels"])])
         micro_f1 = self.print_results(conf, dataset_name)
         # write predictions (of this fold) to file for further evaluation
         pickle.dump((epoch_labels, epoch_predictions), open(os.path.join(self.options["save_dir"],
@@ -123,8 +137,12 @@ class Trainer:
         return macro_f1
 
     def train(self, save_model_dir, device, subsample=False, subsampleSampler=False, max_grad_norm=1.0):
-
-        dev_loader = DataLoader(self.dev_set, batch_size=self.options["batch_size"])
+        dev_loader = None
+        train_loader = None
+        if self.options["task"] == "entity_typing" or self.options["task"] == "slot_typing":
+            dev_loader = DataLoader(self.dev_set, batch_size=self.options["batch_size"], collate_fn=collate_fn)
+        else:
+            dev_loader = DataLoader(self.dev_set, batch_size=self.options["batch_size"])
         best_f1 = 0.0
 
         if subsampleSampler:
@@ -156,11 +174,16 @@ class Trainer:
             print('               Training')
             print('                Epoch', epoch_counter)
             print('####################################################')
-
             if subsample:
-                train_loader = DataLoader(self.train_set, sampler=train_sampler, batch_size=self.options["batch_size"])
+                if self.options["task"] == "entity_typing" or self.options["task"] == "slot_typing":
+                    train_loader = DataLoader(self.train_set, sampler=train_sampler, batch_size=self.options["batch_size"], collate_fn=collate_fn)
+                else:
+                    train_loader = DataLoader(self.train_set, sampler=train_sampler, batch_size=self.options["batch_size"])
             else:
-                train_loader = DataLoader(self.train_set, shuffle=True, batch_size=self.options["batch_size"])
+                if self.options["task"] == "entity_typing" or self.options["task"] == "slot_typing":
+                    train_loader = DataLoader(self.train_set, shuffle=True, batch_size=self.options["batch_size"], collate_fn=collate_fn)
+                else:
+                    train_loader = DataLoader(self.train_set, shuffle=True, batch_size=self.options["batch_size"])
 
             # initialize variables to hold epoch loss, labels, scores
             epoch_loss = 0

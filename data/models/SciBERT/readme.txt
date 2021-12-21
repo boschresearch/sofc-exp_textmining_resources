@@ -1,1 +1,1 @@
-Place PyTorch SciBERT model files here.
+Place PyTorch SciBERT model files here using one folder per model, or change the value of the "pretrained_bert" command line argument to point to your model files.
