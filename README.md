@@ -12,9 +12,7 @@ This repository contains the companion material for the following publication:
 Anika Maruscyk and Lukas Lange. **The SOFC-Exp Corpus and Neural Approaches to Information Extraction
 in the Materials Science Domain.** ACL 2020.
 
-Please cite this paper if using the dataset or the code, and direct any questions regarding the dataset
-to [Annemarie Friedrich](mailto:annemarie.friedrich@de.bosch.com), and any questions regarding the code to
-[Heike Adel](mailto:heike.adel@de.bosch.com).
+Please cite this paper if using the dataset or the code, and direct any questions to [Lukas Lange](mailto:lukas.lange@de.bosch.com).
 The paper can be found at the [ACL Anthology](https://www.aclweb.org/anthology/2020.acl-main.116/) or at
 [ArXiv](https://arxiv.org/abs/2006.03039).
 
