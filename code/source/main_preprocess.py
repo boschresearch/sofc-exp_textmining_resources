@@ -31,6 +31,7 @@ parser.add_argument('-corpus_meta_data_file', default='../sofc-exp-corpus/SOFC-E
 parser.add_argument('-embedding_file_word2vec', default='../data/embeddings/GoogleNews-vectors-negative300.bin')
 parser.add_argument('-embedding_file_mat2vec', default='../data/embeddings/pretrained_embeddings')
 parser.add_argument('-embedding_file_bpe', default='../data/embeddings/en.wiki.bpe.vs200000.d300.w2v.bin')
+parser.add_argument('-embedding_model_bpe', default='../data/embeddings/en.wiki.bpe.vs200000.model')
 
 # output location
 parser.add_argument('-output_word2index_file_mat2vec', default='../data/embeddings/word2index_mat2vec.pickle', type=str)
@@ -56,7 +57,7 @@ data_vocabulary = get_vocab(options['corpus_dir'], train_ids + dev_ids + test_id
 
 mat2vec_word2index, mat2vec_matrix = preprocess_embeddings.get_embedding_weight_matrix(mat2vec_file, "mat2vec", data_vocabulary)
 word2vec_word2index, word2vec_matrix = preprocess_embeddings.get_embedding_weight_matrix(word2vec_file, "word2vec", data_vocabulary)
-bpe_word2index, bpe_matrix = preprocess_embeddings.get_bpe_embedding_weight_matrix(bpe_file, "bpe", data_vocabulary)
+bpe_word2index, bpe_matrix = preprocess_embeddings.get_bpe_embedding_weight_matrix(bpe_file, options["embedding_model_bpe"], data_vocabulary)
 
 preprocess_embeddings.save_word2index(mat2vec_word2index, options['output_word2index_file_mat2vec'])
 preprocess_embeddings.save_word2index(word2vec_word2index, options['output_word2index_file_word2vec'])

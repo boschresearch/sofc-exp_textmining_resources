@@ -45,9 +45,9 @@ def load_weight_matrix(embedding_file):
 def save_weight_matrix(weight_matrix, embedding_file):
     np.save(embedding_file, weight_matrix)
 
-def get_bpe_embedding_weight_matrix(input_embedding_file, embeddings, data_vocabulary, min_word_freq=1):
+def get_bpe_embedding_weight_matrix(input_embedding_file, embeddings_model, data_vocabulary, min_word_freq=1):
     print('creating bpe embedding weights')
-    spm = sentencepiece_load("/home/adh2rng/data/embeddings/en.wiki.bpe.vs200000.model")
+    spm = sentencepiece_load(embeddings_model)
     wv = KeyedVectors.load_word2vec_format(input_embedding_file, binary=True).wv
     embedding_vocab = wv.vocab
 
