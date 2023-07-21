@@ -159,7 +159,7 @@ mentions, but conceptually they indicate links between the respective `EXPERIMEN
 
 ### Installation Requirements
 
-We ran our experiments using Python 3.8. You need the following conda packages: `torch`, `numpy` and `scikit-learn`, and the pip package `transformers` (by Huggingface).
+We ran our experiments using Python 3.8. You need the following conda packages: `torch`, `numpy` and `scikit-learn`, and the pip package `transformers` (by Huggingface), `gensim` (**version < 4**) and `sentencepiece`.
 See also the exported conda environment (`sofcexp.yml` at the top level of the project).
 **Edit 12/21:** The code has been fixed to work with PyTorch 1.8+.
 
@@ -167,9 +167,12 @@ See also the exported conda environment (`sofcexp.yml` at the top level of the p
 
 #### Word2vec, mat2vec, BPE
 
-Download the pretrained [word2vec](https://code.google.com/archive/p/word2vec), [mat2vec](https://github.com/materialsintelligence/mat2vec) and [bpe](https://github.com/bheinzerling/bpemb) embeddings and place them in data/embeddings. If you prefer a different storage location, update the values of the command-line parameters `embedding_file_word2vec`, `embedding_file_mat2vec`, `embedding_file_bpe` in `main_preprocess.py`, accordingly.
+Download the pretrained [word2vec](https://code.google.com/archive/p/word2vec), [mat2vec](https://github.com/materialsintelligence/mat2vec) and [bpe](https://github.com/bheinzerling/bpemb) embeddings and place them in `data/embeddings`. If you prefer a different storage location, update the values of the command-line parameters `embedding_file_word2vec`, `embedding_file_mat2vec`, `embedding_file_bpe` in `main_preprocess.py`, accordingly.
 
-word2vec and bpe embeddings are expected in .bin format; for mat2vec embeddings, you will need the whole content of the folder `mat2vec/training/models/pretrained_embeddings` from the mat2vec project.
+word2vec and bpe embeddings are expected in .bin format; for mat2vec embeddings, you will need the whole content of the folder `mat2vec/training/models/pretrained_embeddings` from the mat2vec project. 
+bpe embeddings must be of vocab size 200,000 and dimensionality 300.
+
+Furthermore, the bpe model with vocab size 200,000 is required and must also be placed in `data/embeddings`.
 
 Run the script `main_preprocess.py`. It will reduce the embeddings to the corpus vocabulary and create word-to-embedding-index files.
 The reduced embeddings will be stored as .npy files, the word2index files as pickle files.
